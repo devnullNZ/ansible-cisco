@@ -1,0 +1,69 @@
+service nagle
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service password-encryption
+!
+hostname {{ hostname }}
+!
+clock timezone AEST 10
+!
+{% if dhcp %}
+{% for range in dhcp.excluded_ranges %}
+ip dhcp excluded-address {{ excluded_range }}
+{% endfor %}
+!
+ip dhcp pool {{ dhcp.pool_name }}
+ network {{ dhcp.network }} {{ dhcp.subnet }}
+ default-router {{ dhcp.default_gateway }}
+ dns-server {{ dhcp.server1 }} {{ dhcp.server2 }}
+{% endif %}
+!
+username com1 privilege 15 secret 5 $1$MneM$vclM4YjiA1dKxRqdRTX.p/
+no username cisco
+!
+{% if loopback %}
+interface Loopback {{ loopback.id }}
+ip address {{ loopback.address }} {{ loopback.subnet }}
+{% endif %}
+
+{% for vlan, name in vlans.items() %}
+vlan {{ vlan }}
+ name {{ name }}
+{% endfor -%}
+
+router bgp {{ id }}
+{% for neighbor in bgp %}
+ neighbor {{ neighbor.neighbor }} remote-as {{ neighbor.remote_as }}
+{% endfor %}
+!
+banner login ^C
+-------------------------------------------------------------------------------------------------------
+UNAUTHORIZED ACCESS TO THIS DEVICE IS PROHIBITED
+
+You must have explicit, authorized permission to access or configure this device. Unauthorized attempts
+and actions to access or use this system may result in civil and/or criminal penalties.
+All activities performed on this device are logged and monitored.
+
+-------------------------------------------------------------------------------------------------------
+^C
+
+line 3
+ exec-timeout 0 0
+ script dialer lte
+ modem InOut
+ no exec
+ transport input all
+ transport output all
+ rxspeed 100000000
+ txspeed 50000000
+line 8
+ script dialer lte
+ modem InOut
+ no exec
+ transport input all
+ transport output all
+ rxspeed 100000000
+ txspeed 50000000
+!

@@ -1,0 +1,19 @@
+{
+   "ip_interfaces":[
+      {
+         "interface":"Gi0/1/0/1",
+         "description":"This is interface number 1!",
+         "ip":"1.1.1.1",
+         "cidr":"/31",
+         "mbps":"10"
+      },
+      {
+         "interface":"Te0/7/0/1",
+         "description":"And this is interface number 2!",
+         "ip":"8.8.8.8",
+         "cidr":"/29",
+         "mbps":""
+      }
+   ]
+
+}

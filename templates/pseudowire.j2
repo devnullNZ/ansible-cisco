@@ -1,0 +1,15 @@
+l2vpn
+{% for pseudowire in pseudowires %}
+  xconnect group {{ pseudowire.customer }}
+    p2p {{ pseudowire.circuit_reference }}
+      interface {{ pseudowire.local_interface }}
+      neighbor ipv4 {{ pseudowire.remote_device }} pw-id {{ pseudowire.pw_id }}
+      exit
+    exit
+  exit
+  interface {{ pseudowire.local_interface }} l2transport
+    description cust: {{ pseudowire.customer }} { {{ pseudowire.circuit_reference }} }
+    no shutdown
+    exit
+
+{% endfor %}

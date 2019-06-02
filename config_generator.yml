@@ -1,0 +1,13 @@
+- hosts: localhost
+  connection: local
+  vars_files:
+    - vars.json
+
+  tasks:
+    - name: Generate config
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        mode: 0777
+      with_items:
+        - {src: 'templates/interfaces.j2',dest: 'interfaces.config'}

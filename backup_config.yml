@@ -1,0 +1,21 @@
+---
+
+- hosts: test
+  gather_facts: true
+  connection: network_cli
+
+
+  tasks:
+    - name: show run
+      ios_command:
+        commands:
+          - show run
+          host: "{{ ansible_host }}"
+          username: "{{ cisco_user }}"
+          password: "{{ cisco_password }}"
+          register: config
+
+    - name: save output
+      copy:
+        content: "{{ config.stdout[0] }}"
+        dest: "/home/gordons/PycharmProjects/ansble/{{show_run_{{ inventory_hostname }}.txt"

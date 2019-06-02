@@ -1,0 +1,8 @@
+{% for pm in policy_maps %}
+  policy-map {{ pm.mbps }} mbps
+    class class-default
+      police rate {{ pm.mbps }} mbps
+      exit
+    exit
+  end-policy-map
+{% endfor %}

@@ -1,0 +1,48 @@
+router bgp 1234
+
+{% for neighbor in bgp_vpnv4 %}
+
+    vrf {{ neighbor.vrf }}
+      rd auto
+      address-family ipv4 unicast
+        redistribute connected
+        exit
+      neighbor {{ neighbor.address }}
+        remote-as {{ neighbor.as }}
+        password clear {{ neighbor.password }}
+        description {{ neighbor.description }}
+          address-family ipv4 unicast
+          as-override
+{% if neighbor.rp_in != "" %}
+          route-policy {{ neighbor.rp_in }} in
+{% endif %}
+{% if neighbor.rp_out != "" %}
+          route-policy {{ neighbor.rp_out }} out
+{% endif %}
+          exit
+        exit
+      exit
+
+{% endfor %}
+
+{% for neighbor in bgp_ipv4 %}
+
+        neighbor {{ neighbor.address }}
+          remote-as {{ neighbor.as }}
+          password clear {{ neighbor.password }}
+          description {{ neighbor.description }}
+            address-family ipv4 unicast
+{% if neighbor.rp_in != "" %}
+          route-policy {{ neighbor.rp_in }} in
+{% endif %}
+{% if neighbor.rp_out != "" %}
+          route-policy {{ neighbor.rp_out }} out
+{% endif %}
+{% if neighbor.max_prefix != "" %}
+          maximum-prefix {{ neighbor.max_prefix }} 90
+{% endif %}
+          exit
+        exit
+      exit
+
+{% endfor %}
