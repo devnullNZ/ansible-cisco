@@ -10,3 +10,22 @@ flow record {{ flow_record_name }}
  collect transport tcp flags
  collect timestamp absolute first
  collect timestamp absolute last
+!
+flow exporter {{ flow_export_name }}
+ description Export to netflow system
+ destination {{ collector_address }}
+ source {{ flow_source }}
+ transport {{ flow_transport }}
+ ttl {{flow_ttl }}
+ !
+ !
+ flow monitor {{monitor_name }}
+ description Netflow monitor
+ record {{ flow_record_name }}
+ cache timeout active 30
+ !
+ !
+ sampler {{ sampler_name }}
+ description NETFLOW
+ mode random 1 out-of 32
+ !
