@@ -20,7 +20,7 @@ ip dhcp pool {{ dhcp.pool_name }}
  dns-server {{ dhcp.server1 }} {{ dhcp.server2 }}
 {% endif %}
 !
-username com1 privilege 15 secret 5 $1$MneM$vclM4YjiA1dKxRqdRTX.p/
+username {{ username }} privilege 15 secret 5 {{ secret }}
 no username cisco
 !
 {% if loopback %}
