@@ -1,0 +1,18 @@
+{% if 4G != "" %}
+interface Cellular{{ 4G.interface_id }}
+ no ipv6 address autoconfig
+ ip address negotiated
+ ip nat outside
+ ip virtual-reassembly in max-reassemblies 64
+ encapsulation slip
+ dialer in-band
+ dialer idle-timeout 0
+ dialer string lte
+ dialer watch-group 1
+ dialer-group 1
+ async mode interactive
+ {% if 4G.VPN_map != "" %}
+ crypto map {{ 4G.VPN_map }}
+ {% endif %}
+{% endif %}
+
